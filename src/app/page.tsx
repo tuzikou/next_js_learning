@@ -5,6 +5,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import TimeRange from '@/components/TimeRange';
 import ComplexForm from '@/components/ComplexForm';
 import DraggableCards from '@/components/DraggableCards';
+import CanvasDraggableCards from '@/components/CanvasDraggableCards';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('time');
@@ -42,7 +43,17 @@ export default function Home() {
                   : 'hover:bg-gray-100'
               }`}
             >
-              卡片拖拽
+              HTML拖拽
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              value="canvas-cards"
+              className={`flex-1 py-3 px-4 rounded-md transition-colors ${
+                activeTab === 'canvas-cards'
+                  ? 'bg-blue-500 text-white'
+                  : 'hover:bg-gray-100'
+              }`}
+            >
+              Canvas拖拽
             </Tabs.Trigger>
           </Tabs.List>
 
@@ -57,6 +68,12 @@ export default function Home() {
           <Tabs.Content value="cards">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <DraggableCards />
+            </div>
+          </Tabs.Content>
+
+          <Tabs.Content value="canvas-cards">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden p-8 flex justify-center">
+              <CanvasDraggableCards />
             </div>
           </Tabs.Content>
         </Tabs.Root>

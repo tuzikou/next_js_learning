@@ -6,9 +6,21 @@ interface MonthsResponse {
   monthStarts: string[];
 }
 
+interface Coordinates {
+  lon: string;
+  lat: string;
+}
+
+const SHANGHAI_COORDINATES: Coordinates = {
+  lon: '121.469170',
+  lat: '31.224361',
+};
+
 export default function TimeRange() {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [longitude, setLongitude] = useState(SHANGHAI_COORDINATES.lon);
+  const [latitude, setLatitude] = useState(SHANGHAI_COORDINATES.lat);
   const [monthStarts, setMonthStarts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -19,24 +31,31 @@ export default function TimeRange() {
       return;
     }
 
+    if (startTime > endTime) {
+      setError('开始时间不能晚于结束时间');
+      return;
+    }
+
+    if (!longitude || !latitude) {
+      setError('请输入有效的经纬度');
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
       
-      // Format dates to YYYY-MM
-      const from = startTime.substring(0, 7);
-      const to = endTime.substring(0, 7);
+      const queryParams = new URLSearchParams({
+        lon: longitude,
+        lat: latitude,
+        from: startTime,
+        to: endTime,
+      });
 
-      // Example coordinates for Shanghai
-      const lon = '121.469170';
-      const lat = '31.224361';
-
-      const response = await fetch(
-        `/api/months?lon=${lon}&lat=${lat}&from=${from}&to=${to}`
-      );
+      const response = await fetch(`/api/months?${queryParams}`);
 
       if (!response.ok) {
-        throw new Error('请求失败');
+        throw new Error(`请求失败: ${response.statusText}`);
       }
 
       const data: MonthsResponse = await response.json();
@@ -48,27 +67,50 @@ export default function TimeRange() {
     }
   };
 
+  const renderTimeInput = (
+    label: string,
+    value: string,
+    onChange: (value: string) => void
+  ) => (
+    <div className="flex items-center gap-4">
+      <label className="w-24">{label}</label>
+      <input
+        type="month"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  );
+
+  const renderCoordinateInput = (
+    label: string,
+    value: string,
+    onChange: (value: string) => void
+  ) => (
+    <div className="flex items-center gap-4">
+      <label className="w-24">{label}</label>
+      <input
+        type="number"
+        step="0.000001"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  );
+
   return (
     <div className="p-6 bg-white rounded-lg shadow-sm">
       <h2 className="text-xl font-semibold mb-6">本地时间区间选择</h2>
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <label className="w-24">开始时间：</label>
-          <input
-            type="datetime-local"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="flex items-center gap-4">
-          <label className="w-24">结束时间：</label>
-          <input
-            type="datetime-local"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        {renderTimeInput('开始时间：', startTime, setStartTime)}
+        {renderTimeInput('结束时间：', endTime, setEndTime)}
+        
+        <div className="pt-4 border-t border-gray-200">
+          <h3 className="text-lg font-medium mb-4">位置信息</h3>
+          {renderCoordinateInput('经度：', longitude, setLongitude)}
+          {renderCoordinateInput('纬度：', latitude, setLatitude)}
         </div>
 
         <div className="mt-6">

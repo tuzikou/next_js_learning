@@ -197,14 +197,13 @@ export default function DraggableCards() {
                       py-6 px-4 rounded-lg transition-all duration-200 relative
                       flex items-center justify-center text-gray-700
                       ${draggedTask === task.id
-                        ? 'bg-blue-100 border-2 border-dashed border-blue-400 opacity-50'
-                        : 'bg-gray-50 border border-gray-200'
+                        ? 'bg-indigo-100 border-2 border-indigo-500 shadow-md transform scale-105' 
+                        : 'bg-gray-50 border border-gray-200 hover:border-gray-300'
                       }
                       cursor-move
                     `}
                   >
                     {task.title}
-                   
                   </div>
                 </div>
               );
