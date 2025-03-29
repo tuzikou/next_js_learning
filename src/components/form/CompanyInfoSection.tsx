@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { UseFormReturn } from "react-hook-form"
 import { FormValues } from "@/types/form"
+import { PhoneInput } from "./PhoneInput"
 
 interface CompanyInfoSectionProps {
   form: UseFormReturn<FormValues>
@@ -22,7 +23,9 @@ export function CompanyInfoSection({
         name="companyName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>公司姓名</FormLabel>
+            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-red-500 text-slate-700">
+              公司姓名
+            </FormLabel>
             <FormControl>
               <Input placeholder="请输入公司名称" {...field} />
             </FormControl>
@@ -31,42 +34,16 @@ export function CompanyInfoSection({
         )}
       />
 
-      <div className="flex gap-4">
-        <FormField
-          control={form.control}
-          name="phoneAreaCode"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormLabel>电话区号</FormLabel>
-              <FormControl>
-                <Input placeholder="+86" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem className="flex-1">
-              <FormLabel>电话号码</FormLabel>
-              <FormControl>
-                <Input placeholder="请输入电话号码" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <PhoneInput form={form} />
 
       <FormField
         control={form.control}
         name="companyAddress"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>公司地址</FormLabel>
+            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-red-500 text-slate-700">
+              公司地址
+            </FormLabel>
             <FormControl>
               <Input placeholder="请输入公司地址" {...field} />
             </FormControl>

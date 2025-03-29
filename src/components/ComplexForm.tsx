@@ -22,6 +22,11 @@ export default function ComplexForm() {
       weight: "",
       width: "",
       depth: "",
+      companyName: "",
+      phoneAreaCode: "",
+      phoneNumber: "",
+      companyAddress: "",
+      billingAddress: "",
     },
     mode: "onChange",
   })

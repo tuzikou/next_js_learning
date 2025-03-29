@@ -14,7 +14,9 @@ export function ProductTypeField({ form }: ProductTypeFieldProps) {
       name="productType"
       render={({ field }) => (
         <FormItem className="space-y-3">
-          <FormLabel>产品类型</FormLabel>
+          <FormLabel className="after:content-['*'] after:ml-0.5 after:text-red-500 text-slate-700">
+            产品类型
+          </FormLabel>
           <FormControl>
             <RadioGroup
               onValueChange={field.onChange}
